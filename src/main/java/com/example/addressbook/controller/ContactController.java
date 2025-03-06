@@ -1,7 +1,9 @@
 package com.example.addressbook.controller;
 
 
-import com.example.addressbook.model.Contact;
+
+
+import com.example.addressbook.dto.ContactDTO;
 import com.example.addressbook.service.ContactService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,28 +23,28 @@ public class ContactController {
 
     // GET All Contacts
     @GetMapping
-    public ResponseEntity<List<Contact>> getAllContacts() {
+    public ResponseEntity<List<ContactDTO>> getAllContacts() {
         return ResponseEntity.ok(service.getAllContacts());
     }
 
     // GET Contact by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Contact> getContactById(@PathVariable Long id) {
-        Optional<Contact> contact = service.getContactById(id);
+    public ResponseEntity<ContactDTO> getContactById(@PathVariable Long id) {
+        Optional<ContactDTO> contact = service.getContactById(id);
         return contact.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // POST - Add New Contact
     @PostMapping
-    public ResponseEntity<Contact> addContact(@RequestBody Contact contact) {
-        return ResponseEntity.ok(service.addContact(contact));
+    public ResponseEntity<ContactDTO> addContact(@RequestBody ContactDTO contactDTO) {
+        return ResponseEntity.ok(service.addContact(contactDTO));
     }
 
     // PUT - Update Contact by ID
     @PutMapping("/{id}")
-    public ResponseEntity<Contact> updateContact(@PathVariable Long id, @RequestBody Contact contact) {
-        Contact updatedContact = service.updateContact(id, contact);
+    public ResponseEntity<ContactDTO> updateContact(@PathVariable Long id, @RequestBody ContactDTO contactDTO) {
+        ContactDTO updatedContact = service.updateContact(id, contactDTO);
         return updatedContact != null ? ResponseEntity.ok(updatedContact)
                 : ResponseEntity.notFound().build();
     }
