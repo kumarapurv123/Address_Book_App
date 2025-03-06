@@ -1,5 +1,9 @@
 package com.example.addressbook.service;
 
+
+
+
+
 import com.example.addressbook.dto.ContactDTO;
 import com.example.addressbook.model.Contact;
 import com.example.addressbook.repository.ContactRepository;
@@ -13,8 +17,12 @@ import java.util.stream.Collectors;
 @Service
 public class ContactService {
 
+    private final ContactRepository repository;
+
     @Autowired
-    private ContactRepository repository;
+    public ContactService(ContactRepository repository) {
+        this.repository = repository;
+    }
 
     // Convert Contact Entity to DTO
     private ContactDTO convertToDTO(Contact contact) {
