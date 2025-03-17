@@ -21,10 +21,10 @@ import java.util.UUID;
 @Component
 @AllArgsConstructor
 @Data
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class  UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private final UserRepository userRepository;
+    private final UserRepository  userRepository;
 
     @Autowired
     private final PasswordEncoder passwordEncoder;
