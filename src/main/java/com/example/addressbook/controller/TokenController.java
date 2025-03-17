@@ -4,6 +4,7 @@ package com.example.addressbook.controller;
 
 
 import com.example.addressbook.model.RefreshToken;
+import com.example.addressbook.request.AuthRequestDTO;
 import com.example.addressbook.request.RefreshTokenRequestDTO;
 import com.example.addressbook.response.JwtResponseDTO;
 import com.example.addressbook.service.JwtService;
