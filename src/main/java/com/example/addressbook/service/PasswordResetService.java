@@ -20,14 +20,39 @@ public class PasswordResetService {
     private final PasswordResetTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     // You can inject EmailService to send the email
+    private final EmailService emailService;
 
     public PasswordResetService(UserRepository userRepository,
                                 PasswordResetTokenRepository tokenRepository,
-                                PasswordEncoder passwordEncoder) {
+                                PasswordEncoder passwordEncoder, EmailService emailService) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
+
+//    @Transactional
+//    public void initiatePasswordReset(String usernameOrEmail) {
+//        UserInfo user = userRepository.findByUsername(usernameOrEmail);
+//        if (user == null) {
+//            throw new IllegalArgumentException("User not found with this username/email");
+//        }
+//        String token = generateSecureToken();
+//        PasswordResetToken passwordResetToken = new PasswordResetToken();
+//        passwordResetToken.setToken(token);
+//        passwordResetToken.setUser(user);
+//        passwordResetToken.setExpiryDate(LocalDateTime.now().plusHours(1)); // Token expires in 1 hour
+//        tokenRepository.save(passwordResetToken);
+//
+//
+//        System.out.println("Generated Password Reset Token: " + token);
+//        // Send email to user with the token
+//
+//        String resetLink = "http://your-frontend-app/reset-password?token=" + token;
+//        String emailText = "Click the following link to reset your password: " + resetLink;
+//
+//        emailService.sendSimpleMessage(user.getEmail(), "Password Reset Request", emailText);
+//    }
 
     @Transactional
     public void initiatePasswordReset(String usernameOrEmail) {
@@ -45,7 +70,13 @@ public class PasswordResetService {
 
         System.out.println("Generated Password Reset Token: " + token);
         // Send email to user with the token
+
+        String resetLink = "http://your-frontend-app/reset-password?token=" + token;
+        String emailText = "Click the following link to reset your password: " + resetLink;
+
+        emailService.sendSimpleMessage(user.getEmail(), "Password Reset Request", emailText);
     }
+
 
     public void resetPassword(PasswordResetDto passwordResetDto) {
         PasswordResetToken token = tokenRepository.findByToken(passwordResetDto.getToken())
