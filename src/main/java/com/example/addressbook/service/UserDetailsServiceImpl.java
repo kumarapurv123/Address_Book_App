@@ -3,8 +3,10 @@ package com.example.addressbook.service;
 
 
 import com.example.addressbook.dto.UserInfoDto;
+import com.example.addressbook.dto.UserRegistrationMessage;
 import com.example.addressbook.model.UserInfo;
 import com.example.addressbook.repository.UserRepository;
+import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +23,19 @@ import java.util.UUID;
 @Component
 @AllArgsConstructor
 @Data
-public class  UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private final UserRepository  userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private MessageProducer messageProducer;
+
+    @Autowired
+    private Gson gson;
 
 
 
@@ -54,6 +62,14 @@ public class  UserDetailsServiceImpl implements UserDetailsService {
         }
         String userId = UUID.randomUUID().toString();
         userRepository.save(new UserInfo(userId, userInfoDto.getUsername(), userInfoDto.getPassword(),userInfoDto.getEmail(), new HashSet<>()));
+//        messageProducer.sendMessage("New user registered: " + userInfoDto.getUsername());
+// After successful signup, create and send the message object
+        UserRegistrationMessage message = new UserRegistrationMessage();
+        message.setUsername(userInfoDto.getUsername());
+        message.setEmail(userInfoDto.getEmail());
+        // Set other fields
+
+        messageProducer.sendMessage(gson.toJson(message)); // Send JSON string
 
         return true;
     }
