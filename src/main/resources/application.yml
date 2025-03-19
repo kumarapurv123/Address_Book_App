@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: addressbook
+  profiles:
+    active: dev
+
+logging:
+  file:
+    name: logs/application.log
+  level:
+    root: INFO
+    com.example.addressbook.service.EmailService: DEBUG
